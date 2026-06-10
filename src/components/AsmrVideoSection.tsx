@@ -76,7 +76,7 @@ export function AsmrVideoSection({ onToast }: AsmrVideoSectionProps) {
             <span className="steam three" />
           </div>
         )}
-        <button className="sound-toggle" type="button" onClick={toggleSound}>
+        <button className="sound-toggle" type="button" onClick={toggleSound} aria-pressed={soundOn}>
           {soundOn ? 'Tắt âm thanh' : 'Bật âm thanh ASMR'}
         </button>
       </div>

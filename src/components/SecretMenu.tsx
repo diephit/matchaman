@@ -25,7 +25,7 @@ export function SecretMenu({ onToast }: SecretMenuProps) {
         <h2>Vuốt ngang để chọn mood cho lần sau</h2>
       </div>
 
-      <div className="menu-scroller">
+      <div className="menu-scroller" aria-label="Danh sách món bí mật">
         {secretMenu.map((item) => (
           <article className="menu-card" key={item.id}>
             <h3>{item.name}</h3>

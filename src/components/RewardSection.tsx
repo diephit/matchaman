@@ -26,7 +26,11 @@ export function RewardSection({ reward, onToast }: RewardSectionProps) {
 
   return (
     <section className="reward-section" aria-label="Phần thưởng của bạn">
-      <p className="eyebrow">Phần thưởng hôm nay</p>
+      <div className="reward-kicker">
+        <p className="eyebrow">Phần thưởng hôm nay</p>
+        <span>Dùng trong 24h</span>
+      </div>
+
       <div className="quote-card">
         <span className="quote-mark" aria-hidden="true">
           “

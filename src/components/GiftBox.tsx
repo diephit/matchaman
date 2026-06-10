@@ -16,7 +16,14 @@ export function GiftBox({ isOpening, onOpen }: GiftBoxProps) {
         <p className="intro">Một quote tarot nhỏ, một mã ưu đãi, và một secret menu đang chờ bạn.</p>
       </div>
 
-      <button className="gift-button" type="button" onPointerUp={onOpen} aria-label="Mở hộp quà matcha">
+      <button
+        className="gift-button"
+        type="button"
+        onClick={onOpen}
+        aria-label="Mở hộp quà matcha"
+        aria-busy={isOpening}
+        disabled={isOpening}
+      >
         <span className="gift-light" aria-hidden="true" />
         <span className="gift-lid" aria-hidden="true">
           <span className="gift-bow" />
@@ -25,7 +32,7 @@ export function GiftBox({ isOpening, onOpen }: GiftBoxProps) {
           <span className="gift-ribbon vertical" />
           <span className="gift-ribbon horizontal" />
         </span>
-        <span className="tap-hint">Tap để mở</span>
+        <span className="tap-hint">{isOpening ? 'Đang mở...' : 'Tap để mở'}</span>
       </button>
 
       <div className="confetti-field" aria-hidden="true">

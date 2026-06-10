@@ -1,4 +1,4 @@
-import { FormEvent, useState } from 'react';
+import { FormEvent, useRef, useState } from 'react';
 import { GOOGLE_LOGIN_PLACEHOLDER, saveLead, ZALO_OA_DEEPLINK_PLACEHOLDER } from '../services/leadService';
 import type { Reward } from '../types';
 import { isValidVietnamPhone } from '../utils/phone';
@@ -9,6 +9,8 @@ type LeadCaptureFormProps = {
 };
 
 export function LeadCaptureForm({ reward, onSaved }: LeadCaptureFormProps) {
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const phoneRef = useRef<HTMLInputElement | null>(null);
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [zaloId, setZaloId] = useState('');
@@ -22,11 +24,13 @@ export function LeadCaptureForm({ reward, onSaved }: LeadCaptureFormProps) {
 
     if (!name.trim()) {
       setError('Vui lòng nhập tên.');
+      nameRef.current?.focus();
       return;
     }
 
     if (!isValidVietnamPhone(phone)) {
       setError('Số điện thoại Việt Nam chưa hợp lệ.');
+      phoneRef.current?.focus();
       return;
     }
 
@@ -52,23 +56,42 @@ export function LeadCaptureForm({ reward, onSaved }: LeadCaptureFormProps) {
 
   return (
     <form className="lead-form" onSubmit={handleSubmit} noValidate>
-      <label>
+      <label htmlFor="lead-name">
         <span>Tên</span>
-        <input value={name} onChange={(event) => setName(event.target.value)} autoComplete="name" />
+        <input
+          ref={nameRef}
+          id="lead-name"
+          value={name}
+          onChange={(event) => setName(event.target.value)}
+          autoComplete="name"
+          aria-describedby={error ? 'lead-form-status' : undefined}
+          aria-invalid={error === 'Vui lòng nhập tên.'}
+        />
       </label>
-      <label>
+
+      <label htmlFor="lead-phone">
         <span>Số điện thoại</span>
         <input
+          ref={phoneRef}
+          id="lead-phone"
           value={phone}
           onChange={(event) => setPhone(event.target.value)}
           inputMode="tel"
           autoComplete="tel"
           placeholder="09xxxxxxxx"
+          aria-describedby={error ? 'lead-form-status' : undefined}
+          aria-invalid={error === 'Số điện thoại Việt Nam chưa hợp lệ.'}
         />
       </label>
-      <label>
+
+      <label htmlFor="lead-zalo">
         <span>Zalo ID hoặc link Zalo</span>
-        <input value={zaloId} onChange={(event) => setZaloId(event.target.value)} placeholder="Không bắt buộc" />
+        <input
+          id="lead-zalo"
+          value={zaloId}
+          onChange={(event) => setZaloId(event.target.value)}
+          placeholder="Không bắt buộc"
+        />
       </label>
 
       <div className="placeholder-links" aria-label="Đăng nhập và chatbot placeholder">
@@ -76,8 +99,16 @@ export function LeadCaptureForm({ reward, onSaved }: LeadCaptureFormProps) {
         <span>{GOOGLE_LOGIN_PLACEHOLDER}</span>
       </div>
 
-      {error && <p className="form-error">{error}</p>}
-      {saved && <p className="form-success">Đã lưu mã thành công</p>}
+      {error && (
+        <p className="form-error" id="lead-form-status" role="alert">
+          {error}
+        </p>
+      )}
+      {saved && !error && (
+        <p className="form-success" id="lead-form-status">
+          Đã lưu mã thành công
+        </p>
+      )}
 
       <button className="primary-button" type="submit" disabled={isSaving}>
         {isSaving ? 'Đang lưu...' : 'Xác nhận lưu mã'}
