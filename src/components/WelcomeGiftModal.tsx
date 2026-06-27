@@ -21,12 +21,15 @@ export default function WelcomeGiftModal() {
   const [email, setEmail] = useState("");
   const [errors, setErrors] = useState<{ name?: string; phone?: string; email?: string }>({});
   
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  
   // Stored values generated once on mount
   const [voucherCode, setVoucherCode] = useState("");
   const [discount, setDiscount] = useState(0);
   const [quote, setQuote] = useState("");
   const [expiryDate, setExpiryDate] = useState("");
   const [copied, setCopied] = useState(false);
+
 
   // Initialize values and check first visit
   useEffect(() => {
@@ -58,6 +61,15 @@ export default function WelcomeGiftModal() {
       return () => clearTimeout(timer);
     }
   }, []);
+
+  // Programmatic play trigger for mobile video when modal opens
+  useEffect(() => {
+    if (step === "modal" && videoRef.current) {
+      videoRef.current.play().catch((err) => {
+        console.log("Autoplay was prevented on mobile:", err);
+      });
+    }
+  }, [step]);
 
   const handleOpenGift = () => {
     if (step !== "gift") return;
@@ -322,10 +334,12 @@ export default function WelcomeGiftModal() {
                 {/* Autoplay Promo Video */}
                 <div className="relative w-full h-[75%] rounded-2xl overflow-hidden bg-charcoal/5 border border-charcoal/10 shadow-inner">
                   <video
+                    ref={videoRef}
                     autoPlay
                     muted
                     loop
                     playsInline
+                    {...{ webkitPlaysInline: true }}
                     className="w-full h-full object-cover"
                   >
                     <source src="/videos/Welcome.mp4" type="video/mp4" />
