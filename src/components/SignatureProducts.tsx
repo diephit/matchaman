@@ -1,17 +1,49 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Image from "next/image";
-import { Plus, Flame, Sparkles } from "lucide-react";
+import { Plus, Flame, Sparkles, ChevronLeft, ChevronRight } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 import { products, type Product } from "@/data/products";
 
 export default function SignatureProducts() {
   const [filter, setFilter] = useState<"all" | "drinks" | "desserts">("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const [columns, setColumns] = useState(3);
+
+  useEffect(() => {
+    const updateColumns = () => {
+      if (window.innerWidth >= 1024) {
+        setColumns(3);
+      } else if (window.innerWidth >= 768) {
+        setColumns(2);
+      } else {
+        setColumns(1);
+      }
+    };
+
+    updateColumns();
+    window.addEventListener("resize", updateColumns);
+    return () => window.removeEventListener("resize", updateColumns);
+  }, []);
+
+  const handleFilterChange = (cat: "all" | "drinks" | "desserts") => {
+    setFilter(cat);
+    setCurrentPage(1);
+  };
 
   const filteredProducts = products.filter(
     (product) => filter === "all" || product.category === filter
+  );
+
+  const pageSize = columns * 2;
+  const totalPages = Math.ceil(filteredProducts.length / pageSize);
+  const adjustedCurrentPage = Math.min(currentPage, totalPages || 1);
+
+  const paginatedProducts = filteredProducts.slice(
+    (adjustedCurrentPage - 1) * pageSize,
+    adjustedCurrentPage * pageSize
   );
 
   return (
@@ -39,7 +71,7 @@ export default function SignatureProducts() {
           {(["all", "drinks", "desserts"] as const).map((cat) => (
             <button
               key={cat}
-              onClick={() => setFilter(cat)}
+              onClick={() => handleFilterChange(cat)}
               className={`px-6 py-2.5 rounded-full text-xs font-semibold tracking-widest uppercase transition-all duration-300 ${
                 filter === cat
                   ? "bg-matcha text-cream shadow-md"
@@ -57,7 +89,7 @@ export default function SignatureProducts() {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 md:gap-10"
         >
           <AnimatePresence mode="popLayout">
-            {filteredProducts.map((product) => (
+            {paginatedProducts.map((product) => (
               <motion.div
                 layout
                 initial={{ opacity: 0, scale: 0.9 }}
@@ -118,6 +150,56 @@ export default function SignatureProducts() {
             ))}
           </AnimatePresence>
         </motion.div>
+
+        {/* Pagination Switch */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-16">
+            <div className="glass px-4 py-2.5 rounded-full flex items-center gap-4 shadow-md border border-matcha/10">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                disabled={adjustedCurrentPage === 1}
+                className="p-1.5 rounded-full hover:bg-cream-dark text-charcoal disabled:opacity-40 disabled:hover:bg-transparent transition-all duration-300 cursor-pointer"
+                aria-label="Previous page"
+              >
+                <ChevronLeft className="w-4 h-4" />
+              </button>
+
+              <div className="flex items-center gap-1.5">
+                {Array.from({ length: totalPages }).map((_, idx) => {
+                  const pageNum = idx + 1;
+                  const isActive = pageNum === adjustedCurrentPage;
+                  return (
+                    <button
+                      key={pageNum}
+                      onClick={() => setCurrentPage(pageNum)}
+                      className={`relative px-3 py-1 text-xs font-semibold rounded-full transition-all duration-300 focus:outline-none cursor-pointer ${
+                        isActive ? "text-cream" : "text-charcoal/70 hover:text-charcoal"
+                      }`}
+                    >
+                      {isActive && (
+                        <motion.div
+                          layoutId="activePageBg"
+                          className="absolute inset-0 bg-matcha rounded-full -z-10"
+                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                        />
+                      )}
+                      {pageNum}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                disabled={adjustedCurrentPage === totalPages}
+                className="p-1.5 rounded-full hover:bg-cream-dark text-charcoal disabled:opacity-40 disabled:hover:bg-transparent transition-all duration-300 cursor-pointer"
+                aria-label="Next page"
+              >
+                <ChevronRight className="w-4 h-4" />
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   );
