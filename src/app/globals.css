@@ -1,0 +1,48 @@
+@import "tailwindcss";
+
+@theme {
+  --color-matcha: #6B8E23;
+  --color-matcha-dark: #526E17;
+  --color-matcha-light: #8AA842;
+  --color-cream: #F8F5EE;
+  --color-cream-dark: #ECE8DD;
+  --color-charcoal: #2C2C2C;
+  --color-charcoal-light: #444444;
+  --color-gold: #D4AF37;
+  --color-gold-dark: #B5932A;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-playfair), ui-serif, Georgia, serif;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    background-color: #F8F5EE; /* fallback to cream hex */
+    color: #2C2C2C; /* fallback to charcoal hex */
+  }
+}
+
+/* Glassmorphism custom classes */
+.glass {
+  background: rgba(248, 245, 238, 0.7);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(107, 142, 35, 0.1);
+}
+
+.glass-dark {
+  background: rgba(44, 44, 44, 0.75);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(212, 175, 55, 0.15);
+}
+
+.text-stroke-gold {
+  -webkit-text-stroke: 1px #D4AF37;
+  color: transparent;
+}
+

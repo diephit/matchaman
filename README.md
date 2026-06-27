@@ -1,61 +1,36 @@
-# Matcha Latte Gamification Web App
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Mobile-first QR landing app for a matcha cup campaign. It lets visitors open a gift, receive a healing/tarot quote and voucher, save lead info, watch an ASMR section, browse the secret menu, and share the reward.
+## Getting Started
 
-## Run locally
+First, run the development server:
 
 ```bash
-npm install
 npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-## Verify
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-```bash
-npm run lint
-npm run build
-```
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## Deploy to Vercel
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-This app is ready for Vercel as a static Vite app.
+## Learn More
 
-1. Push the project to GitHub.
-2. In Vercel, choose **Add New Project** and import the repo.
-3. Keep these settings:
-   - Framework Preset: `Vite`
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
-   - Install Command: `npm install`
-4. Deploy, then open the Vercel URL on your phone or put that URL into a QR code.
+To learn more about Next.js, take a look at the following resources:
 
-`vercel.json` already configures SPA fallback to `index.html` and long-term caching for files in `/assets/`.
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-For phone testing before production, run:
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
-```bash
-npm run build
-npm run preview
-```
+## Deploy on Vercel
 
-Then open the preview URL on a mobile browser. For LAN phone testing, run Vite with a LAN host:
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-```bash
-npm run dev -- --host 0.0.0.0
-```
-
-## Assets
-
-Real Lottie/video assets are optional right now. The app runs with lightweight placeholders.
-
-- Replace `/public/assets/asmr-matcha.mp4` with the real 9:16 ASMR video when ready.
-- `/public/assets/asmr-placeholder.svg` is the current fallback visual.
-- `/public/assets/gift-lottie-placeholder.json` is reserved for a future small Lottie gift animation. The current gift animation uses CSS for performance.
-
-The video component checks for `/assets/asmr-matcha.mp4`; if the file is missing, it displays the placeholder instead.
-
-## Integration TODO
-
-- Replace the mock `saveLead()` in `src/services/leadService.ts` with a real `POST /api/leads`.
-- Replace `ZALO_OA_DEEPLINK_PLACEHOLDER` with the production Zalo OA deep link.
-- Replace `GOOGLE_LOGIN_PLACEHOLDER` with the production Google login entry point.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
